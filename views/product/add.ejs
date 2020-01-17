@@ -1,0 +1,107 @@
+<% layout('partials/layouts/base') -%>
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+
+    <section class="content">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <!-- /.box-header -->
+                    <div class="box-body pad">
+                        <form action="/product/add" method="post">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="product_name">Product Name</label>
+                                    <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Product Name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="product_category">Product Category</label>
+                                    <input type="text" class="form-control" id="product_category" name="product_category" placeholder="Product Category" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="product_description">Product Description</label>
+                                    <textarea id="product_description" class="form-control" name="product_description" rows="10" cols="80" placeholder="Product Description"></textarea>
+                                </div>
+
+                                <div class="form-group multiple-form-group" data-max=6>
+                                    <label>Video</label>
+
+                                    <div class="form-group input-group">
+                                        <input type="text" name="videos" placeholder="Link Youtube" class="form-control">
+                                        <span class="input-group-btn"><button type="button" class="btn btn-default btn-add">+</button></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary pull-right">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+    </section>
+
+</div>
+<!-- /.content-wrapper -->
+
+
+<!-- CK Editor -->
+<% block('script').append('<script src="../../bower_components/ckeditor/ckeditor.js"></script>') %>
+
+<% block('script').append("<script>\n" +
+        "  $(function () {\n" +
+        "    // Replace the <textarea id=\"editor1\"> with a CKEditor\n" +
+        "    // instance, using default configuration.\n" +
+        "    CKEDITOR.replace('product_description')\n" +
+        "    //bootstrap WYSIHTML5 - text editor\n" +
+        "    $('.product_description').wysihtml5()\n" +
+        "  })\n" +
+        "</script>") %>
+
+<% block('script').append("<script> $(function () {" +
+        "        var addFormGroup = function (event) {\n" +
+        "            event.preventDefault();\n" +
+        "            var $formGroup = $(this).closest('.form-group');\n" +
+        "            var $multipleFormGroup = $formGroup.closest('.multiple-form-group');\n" +
+        "            var $formGroupClone = $formGroup.clone();\n" +
+        "            $(this)\n" +
+        "                .toggleClass('btn-default btn-add btn-danger btn-remove')\n" +
+        "                .html('–');\n" +
+        "            $formGroupClone.find('input').val('');\n" +
+        "            $formGroupClone.insertAfter($formGroup);\n" +
+        "            var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');\n" +
+        "            if ($multipleFormGroup.data('max') <= countFormGroup($multipleFormGroup)) {\n" +
+        "                $lastFormGroupLast.find('.btn-add').attr('disabled', true);\n" +
+        "            }\n" +
+        "        };\n" +
+        "        var removeFormGroup = function (event) {\n" +
+        "            event.preventDefault();\n" +
+        "            var $formGroup = $(this).closest('.form-group');\n" +
+        "            var $multipleFormGroup = $formGroup.closest('.multiple-form-group');\n" +
+        "            var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');\n" +
+        "            if ($multipleFormGroup.data('max') >= countFormGroup($multipleFormGroup)) {\n" +
+        "                $lastFormGroupLast.find('.btn-add').attr('disabled', false);\n" +
+        "            }\n" +
+
+        "            $formGroup.remove();\n" +
+        "        };\n" +
+
+        "        var countFormGroup = function ($form) {\n" +
+        "            return $form.find('.form-group').length;\n" +
+        "        };\n" +
+
+        "        $(document).on('click', '.btn-add', addFormGroup);\n" +
+        "        $(document).on('click', '.btn-remove', removeFormGroup);\n" +
+
+        "    });\n" +
+        "</script>") %>
+
+
+

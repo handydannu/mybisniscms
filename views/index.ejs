@@ -1,0 +1,149 @@
+<% layout('partials/layouts/base') -%>
+
+<!-- DataTables -->
+<% block('head').append('<link rel="stylesheet" href="/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">') %>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- DataTables -->
+                <% block('head').append('<link rel="stylesheet" href="/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">') %>
+
+                <!-- Default box -->
+                <div class="box box-primary">
+
+                    <div class="box-header with-border">
+                        <h3 class="box-title" style="padding-top: 7px">Product List</h3>
+                    </div>
+                    <div class="box-body">
+                        <table id="tableUser" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th class="text-center">User Name</th>
+                                <th class="text-center">Product Name</th>
+                                <th class="text-center">Email</th>
+                                <th class="text-center">Company</th>
+                                <th class="text-center">Address</th>
+                                <th class="text-center">Description</th>
+                                <th class="text-center">City</th>
+                                <th class="text-center">Mobile Phone</th>
+                                <th class="text-center">Marketing</th>
+                                <th class="text-center">Order At</th>
+                                <th class="text-center"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% ordered.forEach((product) => { %>
+                            <tr>
+                                <td><%= product.user_name %></td>
+                                <td><%= product.product_name %></td>
+                                <td><%= product.email || "" %></td>
+                                <td><%= product.company || "" %></td>
+                                <td><%= product.user_address || "" %></td>
+                                <td><%= product.description || "" %></td>
+                                <td><%= product.agency_name || "" %></td>
+                                <td><%= product.phone || "" %></td>
+                                <td><%= product.marketing_name || "" %></td>
+                                <td><%= product.ordered_at %></td>
+                                <td>
+                                    <% if (product.marketing_name) { %>
+                                        <a href="#follow_up" data-toggle="modal" disabled="" class="btn btn-sm btn-info delete_user" data-id="<%= product.order_id %>" data-name="<%= product.user_name %>">Follow Up</a>
+                                    <% } else { %>
+                                        <a href="#follow_up" data-toggle="modal" class="btn btn-sm btn-info delete_user" data-id="<%= product.order_id %>" data-name="<%= product.user_name %>">Follow Up</a>
+                                    <% } %>
+
+                                </td>
+                                <td>
+                                    <a href="#delete-order" data-toggle="modal" class="btn btn-sm btn-danger delete_order" data-id="<%= product.order_id %>" data-name="<%= product.user_name %>">Delete Order</a>
+                                </td>
+
+                            </tr>
+                            <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+
+        </div>
+    </section>
+
+</div>
+<!-- /.content-wrapper -->
+
+<% block('modal-block').append('<div class="modal fade" tabindex="-1" role="dialog" id="follow_up">\n' +
+        '    <div class="modal-dialog" role="document">\n' +
+        '        <div class="modal-content">\n' +
+        '            <form role="form" id="form_follow_up" action="" method="POST">\n' +
+        '                <input type="hidden" name="_method" value="put">\n' +
+        '                <div class="modal-header">\n' +
+        '                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' +
+        '                    <h4 class="modal-title">Follow Up</h4>\n' +
+        '                </div>\n' +
+        '                <div class="modal-body">\n' +
+        '                    <p id="content_follow_up"></p>\n' +
+        '                </div>\n' +
+        '                <div class="modal-footer">\n' +
+        '                    <button type="submit" class="btn btn-success">Iya</button>\n' +
+        '                    <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>\n' +
+        '                </div>\n' +
+        '            </form>\n' +
+        '        </div><!-- /.modal-content -->\n' +
+        '    </div><!-- /.modal-dialog -->\n' +
+        '</div><!-- /.modal -->') %>
+
+
+<% block('modal-block').append('<div class="modal fade" tabindex="-1" role="dialog" id="delete-order">\n' +
+        '    <div class="modal-dialog" role="document">\n' +
+        '        <div class="modal-content">\n' +
+        '            <form role="form" id="form_delete_order" action="" method="POST">\n' +
+        '                <div class="modal-header">\n' +
+        '                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' +
+        '                    <h4 class="modal-title">Delete Order</h4>\n' +
+        '                </div>\n' +
+        '                <div class="modal-body">\n' +
+        '                    <p id="content_delete_order"></p>\n' +
+        '                </div>\n' +
+        '                <div class="modal-footer">\n' +
+        '                    <button type="submit" class="btn btn-danger">Hapus</button>\n' +
+        '                    <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>\n' +
+        '                </div>\n' +
+        '            </form>\n' +
+        '        </div><!-- /.modal-content -->\n' +
+        '    </div><!-- /.modal-dialog -->\n' +
+        '</div><!-- /.modal -->') %>
+
+<!-- DataTables -->
+<% block('footer').append('<script src="/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>') %>
+<% block('footer').append('<script src="/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>') %>
+
+<!-- page script -->
+<% block('script').append("<script>\n" +
+        "    $(function () {\n" +
+        "        $('#tableUser').DataTable({\n" +
+        "            'paging'      : true,\n" +
+        "            'lengthChange': true,\n" +
+        "            'searching'   : true,\n" +
+        "            'ordering'    : true,\n" +
+        "            'info'        : true,\n" +
+        "            'autoWidth'   : false\n" +
+        "        })\n" +
+        "    })\n" +
+
+        "$(document).on('click', '.delete_order', function() { const id = $(this).data('id'); const name = $(this).data('name'); const url = 'product/order/' + id + '/delete'; $('#content_delete_order').html('Anda Yakin menghapus Pesanan atas nama ' + name + ' ?'); $('#form_delete_order').attr('action', url);});" +
+        "</script>") %>
+
+<% block('script').append("<script>$(document).on(\"click\", \".delete_user\", function() {\n" +
+        "var id =  $(this).data('id');\n" +
+        "var name = $(this).data('name');\n" +
+        "\n" +
+        "document.getElementById(\"content_follow_up\").innerHTML = 'Follow Up Pesanan ' + name + '?'\n" +
+        "document.getElementById(\"form_follow_up\").action =\"/product/follow_up/\" + id \n" +
+        "})</script>") %>
+
+

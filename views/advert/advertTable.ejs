@@ -1,0 +1,83 @@
+<!-- DataTables -->
+<% block('head').append('<link rel="stylesheet" href="/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">') %>
+
+<!-- Default box -->
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <a href="/advert/add" class="btn btn-primary btn-sm pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Advert</a>
+        <h3 class="box-title" style="padding-top: 7px">User List</h3>
+    </div>
+    <div class="box-body">
+        <table id="tableUser" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th class="text-center">Image Url</th>
+                <th class="text-center">Type</th>
+                <th class="text-center">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% adverts.forEach((advert, key) => { %>
+            <tr>
+                <td><a href="<%= advert.imageUrl %>" target="_blank">Iklan <%= key+1 %></a> </td>
+                <td><%= advert.type %></td>
+                <td class="text-center">
+                    <a href="#delete_advert" data-toggle="modal" class="delete_advert" data-id="<%= advert.id %>"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                </td>
+            </tr>
+            <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+
+<% block('modal-block').append('<div class="modal fade" tabindex="-1" role="dialog" id="delete_advert">\n' +
+        '    <div class="modal-dialog" role="document">\n' +
+        '        <div class="modal-content">\n' +
+        '            <form role="form" id="form_delete" action="" method="POST">\n' +
+        '                <input type="hidden" name="_method" value="put">\n' +
+        '                <div class="modal-header">\n' +
+        '                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' +
+        '                    <h4 class="modal-title">Hapus Advert</h4>\n' +
+        '                </div>\n' +
+        '                <div class="modal-body">\n' +
+        '                    <p id="content_delete">Anda yakin menghapus iklan ini ?</p>\n' +
+        '                </div>\n' +
+        '                <div class="modal-footer">\n' +
+        '                    <button type="submit" class="btn btn-danger">Hapus</button>\n' +
+        '                    <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>\n' +
+        '                </div>\n' +
+        '            </form>\n' +
+        '        </div><!-- /.modal-content -->\n' +
+        '    </div><!-- /.modal-dialog -->\n' +
+        '</div><!-- /.modal -->') %>
+
+
+<!-- DataTables -->
+<% block('footer').append('<script src="/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>') %>
+<% block('footer').append('<script src="/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>') %>
+
+<!-- page script -->
+<% block('script').append("<script>\n" +
+        "    $(function () {\n" +
+        "        $('#tableUser').DataTable({\n" +
+        "            'paging'      : true,\n" +
+        "            'lengthChange': false,\n" +
+        "            'searching'   : false,\n" +
+        "            'ordering'    : true,\n" +
+        "            'info'        : true,\n" +
+        "            'autoWidth'   : false\n" +
+        "        })\n" +
+        "    })\n" +
+        "</script>") %>
+
+<% block('script').append("<script>$(document).on(\"click\", \".delete_advert\", function() {\n" +
+        "var id =  $(this).data('id');\n" +
+        "var name = $(this).data('name');\n" +
+        "\n" +
+        "document.getElementById(\"content_delete\").innerHTML = 'Hapus user ' + name + '?'\n" +
+        "document.getElementById(\"form_delete\").action =\"/advert/\" +id+ \"/delete\"\n" +
+        "})</script>") %>
